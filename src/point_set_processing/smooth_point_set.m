@@ -1,5 +1,5 @@
 function V_out = smooth_point_set(V_in, k, nb_it)
-% smooth_point_set : function to smooth one given point set (V_in).
+%% smooth_point_set : function to smooth one given point set (V_in).
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
 %
@@ -25,7 +25,7 @@ function V_out = smooth_point_set(V_in, k, nb_it)
 %           [| | |]
 
 
-% Body
+%% Body
 V_out = V_in;
 nb_vtx = size(V_in,1);
 
@@ -33,7 +33,7 @@ nb_vtx = size(V_in,1);
 for j = 1:nb_it
     
     % Compute normals
-    N = estimate_point_set_normals(V_out,k);
+    N = estimate_point_set_normals(V_out,k,'norm','oriented');
     
     % Loop on every point of the set
     for i = 1:nb_vtx
@@ -57,12 +57,3 @@ end
 
 
 end % smooth_point_set
-
-
-% Option
-%
-% Renormalization with the point original norm ?
-
-% Méthode #2 :
-%
-% Moyenne des interpolations bilinéaires des combinaisons des paires des knn

@@ -1,4 +1,4 @@
-function N = estimate_point_set_normals(V, k, mode) % orientation as an option
+function N = estimate_point_set_normals(V, k, mode_norm, mode_orient) % orientation as an option
 %% estimate_point_set_normals : function to estimate normals to the points of the given set (V).
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
@@ -13,8 +13,11 @@ function N = estimate_point_set_normals(V, k, mode) % orientation as an option
 % - k : positive integer scalar double, the number of neighbor for the k
 %       nearest neighbor search. In practive chose k >= 4.
 %
-% - mode : character string in the set : {'raw','norm'*,'RAW','NORM'}, the variable deciding
-%          wether to normalize or not the face normals. Case insensitive.
+% - mode_norm : character string in the set : {'raw','norm'*,'RAW','NORM'}, the variable deciding
+%               wether to normalize or not the vertex normals. Case insensitive.
+%
+% - mode_orient : character string in the set : {'raw','oriented'*,'RAW','ORIENTED'}, the variable deciding
+%                 wether to orient or not the vertex normals. Case insensitive.
 %
 %
 %%% Output argument
@@ -24,9 +27,15 @@ function N = estimate_point_set_normals(V, k, mode) % orientation as an option
 %       [ |  |  |]
 
 
-if nargin  < 3
-   
-        mode = 'norm';
+if nargin < 4
+    
+    mode_orient = 'oriented';
+    
+    if nargin  < 3
+        
+        mode_norm = 'norm';
+        
+    end
     
 end
 
@@ -84,175 +93,179 @@ for i = 1:nb_vtx
     
 end
 
-if strcmpi(mode,'norm')
+if strcmpi(mode_norm,'norm')
     
     N = N ./ sqrt(sum(N.^2,2));
     
 end
 
 
-% VI Reorient vertex normals coherently
-check_orientation = false(nb_vtx,1);
-id_vect = [];
-
-% Orient outward bounding box xyz limits neighbor normals
-for i = 1:6
+if strcmpi(mode_orient,'oriented')
     
-    cur_vtx = V(bb_idx(i),:);
-    knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
+    % VI Reorient vertex normals coherently
+    check_orientation = false(nb_vtx,1);
+    id_vect = [];
     
-    n2swith_id = nonzeros((dot(N(knn_id,:),V(knn_id,:),2) < 0) .* knn_id');    
-    n2swith_id = setdiff(n2swith_id,id_vect);
-    
-    if ~isempty(n2swith_id)
-    
-        % Orient outward
-        N(n2swith_id,:) = - N(n2swith_id,:);                
+    % Orient outward bounding box xyz limits neighbor normals
+    for i = 1:6
         
-    end
-    
-    id_vect = cat(2,id_vect,knn_id);
-    check_orientation(knn_id) = true;
-    
-end
-
-
-% 8 quadrant bisectrice direction maxima 
-sign_vol = prod(V,2);
-S = sign(V);
-C1_id = (S(:,1) > 0) & (S(:,2) > 0) & (S(:,3) > 0);
-C2_id = (S(:,1) > 0) & (S(:,2) > 0) & (S(:,3) < 0);
-C3_id = (S(:,1) > 0) & (S(:,2) < 0) & (S(:,3) > 0);
-C4_id = (S(:,1) > 0) & (S(:,2) < 0) & (S(:,3) < 0);
-C5_id = (S(:,1) < 0) & (S(:,2) > 0) & (S(:,3) > 0);
-C6_id = (S(:,1) < 0) & (S(:,2) > 0) & (S(:,3) < 0);
-C7_id = (S(:,1) < 0) & (S(:,2) < 0) & (S(:,3) > 0);
-C8_id = (S(:,1) < 0) & (S(:,2) < 0) & (S(:,3) < 0);
-
-set1 = sign_vol.*C1_id;
-set2 = sign_vol.*C2_id;
-set3 = sign_vol.*C3_id;
-set4 = sign_vol.*C4_id;
-set5 = sign_vol.*C5_id;
-set6 = sign_vol.*C6_id;
-set7 = sign_vol.*C7_id;
-set8 = sign_vol.*C8_id;
-
-id1 = find(set1 == max(set1),1);
-id2 = find(set2 == max(set2),1);
-id3 = find(set3 == max(set3),1);
-id4 = find(set4 == max(set4),1);
-id5 = find(set5 == max(set5),1);
-id6 = find(set6 == max(set6),1);
-id7 = find(set7 == max(set7),1);
-id8 = find(set8 == max(set8),1);
-
-quad_ids = unique(cat(2,id1,id2,id3,id4,id5,id6,id7,id8));
-quad_ids = setdiff(quad_ids,id_vect);
-
-
-% Orient outward 8 quadrant bisectrice direction maxima neighbor normals
-for i = 1:numel(quad_ids)
-    
-    cur_vtx = V(quad_ids(i),:);
-    knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
-    
-    n2swith_id = nonzeros((dot(N(knn_id,:),V(knn_id,:),2) < 0) .* knn_id');    
-    n2swith_id = setdiff(n2swith_id,id_vect);
-    
-    if ~isempty(n2swith_id)
-    
-        % Orient outward
-        N(n2swith_id,:) = - N(n2swith_id,:);                
+        cur_vtx = V(bb_idx(i),:);
+        knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
         
-    end
-    
-    id_vect = cat(2,id_vect,knn_id);
-    check_orientation(knn_id) = true;
-    
-end
-
-
-dst = sqrt(sum(V.^2,2));
-cur_id = find(dst == max(dst),1); % furthest vertex
-cur_vtx = V(cur_id,:);
-
-% Normal orientation
-norm_or = sign(dot(N(cur_id,:),cur_vtx,2));
-
-if norm_or < 0
-    
-    % Orient outward
-    N(cur_id,:) = norm_or * N(cur_id,:);
-    
-end
-
-
-% From neighborhood to neighborhood
-while ~isempty(knn_id) % && numel(id_vect) < nb_vtx % cur_id && ~isempty(cur_vtx) &&
-    
-    knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
-    knn_id = setdiff(knn_id,id_vect,'stable');
-               
-    n2swith_id = nonzeros((dot(N(knn_id,:),repmat(N(cur_id,:),[numel(knn_id),1]),2) < 0) .* knn_id');    
-    n2swith_id = setdiff(n2swith_id,id_vect);
-    
-    if ~isempty(n2swith_id)
-    
-        % Orient outward
-        N(n2swith_id,:) = - N(n2swith_id,:);                
+        n2swith_id = nonzeros((dot(N(knn_id,:),V(knn_id,:),2) < 0) .* knn_id');
+        n2swith_id = setdiff(n2swith_id,id_vect);
         
-    end
-    
-    id_vect = cat(2,id_vect,knn_id);
-    check_orientation(knn_id) = true;
-    
-    if ~isempty(knn_id)
-        
-        cur_id = knn_id(end); % fursthest
-        cur_vtx = V(cur_id,:);
-        
-    end
+        if ~isempty(n2swith_id)
             
-end
-
-
-rm_ids = setdiff(1:nb_vtx,id_vect);
-raw_or_ids   = find(check_orientation);
-inter_or_ids = (1:nnz(check_orientation))';
-M = containers.Map(inter_or_ids,raw_or_ids);
-
-V_ckeck = V(raw_or_ids,:);
-j = 1;
-
-% Orient remaining vertex normals
-while j < (1 + numel(rm_ids))
-    
-    cur_id = rm_ids(j);
-    cur_vtx = V(cur_id,:);
-    
-    % Search nearest neighbor among already normal oriented vertex set
-    knn_id = knnsearch(V_ckeck,cur_vtx,'k',k,'Distance','seuclidean');
-    
-    % Retrieve real indices with map
-    knn_id = values(M,num2cell(knn_id));
-    knn_id_raw = cell2mat(knn_id);        
-    nn_id = knn_id_raw(1,1);
-    
-    % Nearest neighbor which has already been processed / check
-    if ~isempty(nn_id)
-        
-        if dot(N(nn_id,:),N(cur_id,:),2) < 0
-            
-            N(cur_id,:) = - N(cur_id,:);
+            % Orient outward
+            N(n2swith_id,:) = - N(n2swith_id,:);
             
         end
         
-        check_orientation(cur_id) = true;                
+        id_vect = cat(2,id_vect,knn_id);
+        check_orientation(knn_id) = true;
         
     end
     
-    j = j + 1;
+    
+    % 8 quadrant bisectrice direction maxima
+    sign_vol = prod(V,2);
+    S = sign(V);
+    C1_id = (S(:,1) > 0) & (S(:,2) > 0) & (S(:,3) > 0);
+    C2_id = (S(:,1) > 0) & (S(:,2) > 0) & (S(:,3) < 0);
+    C3_id = (S(:,1) > 0) & (S(:,2) < 0) & (S(:,3) > 0);
+    C4_id = (S(:,1) > 0) & (S(:,2) < 0) & (S(:,3) < 0);
+    C5_id = (S(:,1) < 0) & (S(:,2) > 0) & (S(:,3) > 0);
+    C6_id = (S(:,1) < 0) & (S(:,2) > 0) & (S(:,3) < 0);
+    C7_id = (S(:,1) < 0) & (S(:,2) < 0) & (S(:,3) > 0);
+    C8_id = (S(:,1) < 0) & (S(:,2) < 0) & (S(:,3) < 0);
+    
+    set1 = sign_vol.*C1_id;
+    set2 = sign_vol.*C2_id;
+    set3 = sign_vol.*C3_id;
+    set4 = sign_vol.*C4_id;
+    set5 = sign_vol.*C5_id;
+    set6 = sign_vol.*C6_id;
+    set7 = sign_vol.*C7_id;
+    set8 = sign_vol.*C8_id;
+    
+    id1 = find(set1 == max(set1),1);
+    id2 = find(set2 == max(set2),1);
+    id3 = find(set3 == max(set3),1);
+    id4 = find(set4 == max(set4),1);
+    id5 = find(set5 == max(set5),1);
+    id6 = find(set6 == max(set6),1);
+    id7 = find(set7 == max(set7),1);
+    id8 = find(set8 == max(set8),1);
+    
+    quad_ids = unique(cat(2,id1,id2,id3,id4,id5,id6,id7,id8));
+    quad_ids = setdiff(quad_ids,id_vect);
+    
+    
+    % Orient outward 8 quadrant bisectrice direction maxima neighbor normals
+    for i = 1:numel(quad_ids)
+        
+        cur_vtx = V(quad_ids(i),:);
+        knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
+        
+        n2swith_id = nonzeros((dot(N(knn_id,:),V(knn_id,:),2) < 0) .* knn_id');
+        n2swith_id = setdiff(n2swith_id,id_vect);
+        
+        if ~isempty(n2swith_id)
+            
+            % Orient outward
+            N(n2swith_id,:) = - N(n2swith_id,:);
+            
+        end
+        
+        id_vect = cat(2,id_vect,knn_id);
+        check_orientation(knn_id) = true;
+        
+    end
+    
+    
+    dst = sqrt(sum(V.^2,2));
+    cur_id = find(dst == max(dst),1); % furthest vertex
+    cur_vtx = V(cur_id,:);
+    
+    % Normal orientation
+    norm_or = sign(dot(N(cur_id,:),cur_vtx,2));
+    
+    if norm_or < 0
+        
+        % Orient outward
+        N(cur_id,:) = norm_or * N(cur_id,:);
+        
+    end
+    
+    
+    % From neighborhood to neighborhood
+    while ~isempty(knn_id) % && numel(id_vect) < nb_vtx % cur_id && ~isempty(cur_vtx) &&
+        
+        knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
+        knn_id = setdiff(knn_id,id_vect,'stable');
+        
+        n2swith_id = nonzeros((dot(N(knn_id,:),repmat(N(cur_id,:),[numel(knn_id),1]),2) < 0) .* knn_id');
+        n2swith_id = setdiff(n2swith_id,id_vect);
+        
+        if ~isempty(n2swith_id)
+            
+            % Orient outward
+            N(n2swith_id,:) = - N(n2swith_id,:);
+            
+        end
+        
+        id_vect = cat(2,id_vect,knn_id);
+        check_orientation(knn_id) = true;
+        
+        if ~isempty(knn_id)
+            
+            cur_id = knn_id(end); % fursthest
+            cur_vtx = V(cur_id,:);
+            
+        end
+        
+    end
+    
+    
+    rm_ids = setdiff(1:nb_vtx,id_vect);
+    raw_or_ids   = find(check_orientation);
+    inter_or_ids = (1:nnz(check_orientation))';
+    M = containers.Map(inter_or_ids,raw_or_ids);
+    
+    V_ckeck = V(raw_or_ids,:);
+    j = 1;
+    
+    % Orient remaining vertex normals
+    while j < (1 + numel(rm_ids))
+        
+        cur_id = rm_ids(j);
+        cur_vtx = V(cur_id,:);
+        
+        % Search nearest neighbor among already normal oriented vertex set
+        knn_id = knnsearch(V_ckeck,cur_vtx,'k',k,'Distance','seuclidean');
+        
+        % Retrieve real indices with map
+        knn_id = values(M,num2cell(knn_id));
+        knn_id_raw = cell2mat(knn_id);
+        nn_id = knn_id_raw(1,1);
+        
+        % Nearest neighbor which has already been processed / check
+        if ~isempty(nn_id)
+            
+            if dot(N(nn_id,:),N(cur_id,:),2) < 0
+                
+                N(cur_id,:) = - N(cur_id,:);
+                
+            end
+            
+            check_orientation(cur_id) = true;
+            
+        end
+        
+        j = j + 1;
+        
+    end
     
 end
 
