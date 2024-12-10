@@ -1,4 +1,4 @@
-function N = estimate_point_set_normals(V, k, mode)
+function N = estimate_point_set_normals(V, k, mode) % orientation as an option
 %% estimate_point_set_normals : function to estimate normals to the points of the given set (V).
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
@@ -22,6 +22,13 @@ function N = estimate_point_set_normals(V, k, mode)
 %       [ |  |  |]
 % - N : [Nx Ny Nz], real matrix double, the vertex normal vectors, size(N) = [nb_vertices,3].
 %       [ |  |  |]
+
+
+if nargin  < 3
+   
+        mode = 'norm';
+    
+end
 
 
 %% Body
