@@ -1,13 +1,13 @@
-function [] = plot_point_set(V, marker, color, markersize)
-%% plot_point_set : function to plot the point set (V) vertices in a Matlab (R) figure.
+function [] = plot_point_set(P, marker, color, markersize)
+%% plot_point_set : function to plot the point set (P) in a Matlab (R) figure.
 %
 %%% Author : nicolas.douillet (at) free.fr, 2020-2024.
 %
 %
-% Input arguments
+%%% Input arguments
 %
 %       [| | |]
-% - V = [X Y Z], real matrix double, the point set, size(V) = [nb_vertices,3].
+% - P = [X Y Z], real matrix double, the point set, size(P) = [nb_points,3].
 %       [| | |]
 %
 % - marker : character in the set {'o','+','*','.','x','s','d','^','v','>','<','p','h'}. For further details see Line Spec in
@@ -37,7 +37,7 @@ h = figure;
 % set(h,'Position',get(0,'ScreenSize'));
 set(gcf,'Color',[0 0 0]);
 
-plot3(V(:,1),V(:,2),V(:,3),marker,'Color',color,'MarkerSize',markersize,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
+plot3(P(:,1),P(:,2),P(:,3),marker,'Color',color,'MarkerSize',markersize,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
 xlabel('X'), ylabel('Y'), zlabel('Z');
 axis equal;
 set(gca, 'Color', [0 0 0], 'XColor', [1 1 1], 'YColor', [1 1 1], 'ZColor', [1 1 1]);

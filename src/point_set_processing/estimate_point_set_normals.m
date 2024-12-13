@@ -1,5 +1,5 @@
-function N = estimate_point_set_normals(V, k, mode_norm, mode_orient) % orientation as an option
-%% estimate_point_set_normals : function to estimate normals to the points of the given set (V).
+function N = estimate_point_set_normals(P, k, mode_norm, mode_orient) % orientation as an option
+%% estimate_point_set_normals : function to estimate normals to the points of the given set (P).
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
 %
@@ -7,23 +7,23 @@ function N = estimate_point_set_normals(V, k, mode_norm, mode_orient) % orientat
 %%% Input arguments
 %
 %       [| | |]
-% - V = [X Y Z], real matrix double, the point set, size(V) = [nb_vertices,3].
+% - P = [X Y Z], real matrix double, the point set, size(P) = [nb_points,3].
 %       [| | |]
 %
 % - k : positive integer scalar double, the number of neighbor for the k
 %       nearest neighbor search. In practive chose k >= 4.
 %
 % - mode_norm : character string in the set : {'raw','norm'*,'RAW','NORM'}, the variable deciding
-%               wether to normalize or not the vertex normals. Case insensitive.
+%               wether to normalize or not the point normals. Case insensitive.
 %
 % - mode_orient : character string in the set : {'raw','oriented'*,'RAW','ORIENTED'}, the variable deciding
-%                 wether to orient or not the vertex normals. Case insensitive.
+%                 wether to orient or not the point normals. Case insensitive.
 %
 %
 %%% Output argument
 %
 %       [ |  |  |]
-% - N : [Nx Ny Nz], real matrix double, the vertex normal vectors, size(N) = [nb_vertices,3].
+% - N : [Nx Ny Nz], real matrix double, the point normal vectors, size(N) = [nb_points,3].
 %       [ |  |  |]
 
 
@@ -41,31 +41,31 @@ end
 
 
 %% Body
-[x_min, idx1] = min(V(:,1));
-[x_max, idx2] = max(V(:,1));
-[y_min, idy1] = min(V(:,2));
-[y_max, idy2] = max(V(:,2));
-[z_min, idz1] = min(V(:,3));
-[z_max, idz2] = max(V(:,3));
+[x_min, idx1] = min(P(:,1));
+[x_max, idx2] = max(P(:,1));
+[y_min, idy1] = min(P(:,2));
+[y_max, idy2] = max(P(:,2));
+[z_min, idz1] = min(P(:,3));
+[z_max, idz2] = max(P(:,3));
 
 bbc = 0.5*[(x_min+x_max) (y_min+y_max) (z_min+z_max)]; % bounding box centre
 bb_idx = [idx1 idx2 idy1 idy2 idz1 idz2]; % fursthest point belongs to this bounding boxe
 
-V = V - bbc; % mean(V,1);
+P = P - bbc; % mean(P,1);
 
-nb_vtx = size(V,1);
-ids = zeros(nb_vtx,k);
-N   = zeros(nb_vtx,3);
+nb_pt = size(P,1);
+ids = zeros(nb_pt,k);
+N   = zeros(nb_pt,3);
 
-% Compute raw normals for each vertex of the set
-for i = 1:nb_vtx
+% Compute raw normals for each point of the set
+for i = 1:nb_pt
     
     % I Look for k nearest neighbors
-    ids(i,:) = knnsearch(V,V(i,:),'k',k,'Distance','seuclidean');
+    ids(i,:) = knnsearch(P,P(i,:),'k',k,'Distance','seuclidean');
     
     % II Angular sort of k nearest neighbors
-    V_ngb = V(ids(i,2:end),:);
-    U = V_ngb - V(i,:);
+    P_ngb = P(ids(i,2:end),:);
+    U = P_ngb - P(i,:);
     ref_vect1 = repmat(U(1,:),[k-1,1]);
     
     bov = cross(U(1,:),U(2,:),2); % No way to control this order
@@ -73,22 +73,22 @@ for i = 1:nb_vtx
                  sqrt(sum(cross(ref_vect1,U,2).^2,2)),dot(ref_vect1,U,2));
     
     [~,id] = sort(angl);
-    S = V_ngb(id,:);
+    S = P_ngb(id,:);
         
-    % III Link and mesh triangles with current vertex
+    % III Link and mesh triangles with current point
     T_ngb = cat(2,i*ones(k-1,1),ids(i,2:end)',circshift(ids(i,2:end),-1)');
     
-    % Reindex T_ngb according to sorted vertices S using map
-    % Triangulations reindexing according to V naturel indices / order
+    % Reindex T_ngb according to sorted points S using map
+    % Triangulations reindexing according to P naturel indices / order
     M = containers.Map(ids(i,:),1:k);
     T_ngb = values(M,num2cell(T_ngb(:)));
     T_ngb = reshape(cell2mat(T_ngb),[k-1,3]);
         
     % IV Compute triangle raw normals
-    S = cat(1,V(i,:),S);
+    S = cat(1,P(i,:),S);
     Ni = cross(S(T_ngb(:,2),:)-S(T_ngb(:,1),:),S(T_ngb(:,3),:)-S(T_ngb(:,1),:),2);
         
-    % V Compute vertex normal as the average of these last ones
+    % V Compute point normal as the average of these last ones
     N(i,:) = mean(Ni,1);
     
 end
@@ -102,17 +102,17 @@ end
 
 if strcmpi(mode_orient,'oriented')
     
-    % VI Reorient vertex normals coherently
-    check_orientation = false(nb_vtx,1);
+    % VI Reorient point normals coherently
+    check_orientation = false(nb_pt,1);
     id_vect = [];
     
     % Orient outward bounding box xyz limits neighbor normals
     for i = 1:6
         
-        cur_vtx = V(bb_idx(i),:);
-        knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
+        cur_pt = P(bb_idx(i),:);
+        knn_id = knnsearch(P,cur_pt,'k',k,'Distance','seuclidean');
         
-        n2swith_id = nonzeros((dot(N(knn_id,:),V(knn_id,:),2) < 0) .* knn_id');
+        n2swith_id = nonzeros((dot(N(knn_id,:),P(knn_id,:),2) < 0) .* knn_id');
         n2swith_id = setdiff(n2swith_id,id_vect);
         
         if ~isempty(n2swith_id)
@@ -129,8 +129,8 @@ if strcmpi(mode_orient,'oriented')
     
     
     % 8 quadrant bisectrice direction maxima
-    sign_vol = prod(V,2);
-    S = sign(V);
+    sign_vol = prod(P,2);
+    S = sign(P);
     C1_id = (S(:,1) > 0) & (S(:,2) > 0) & (S(:,3) > 0);
     C2_id = (S(:,1) > 0) & (S(:,2) > 0) & (S(:,3) < 0);
     C3_id = (S(:,1) > 0) & (S(:,2) < 0) & (S(:,3) > 0);
@@ -165,10 +165,10 @@ if strcmpi(mode_orient,'oriented')
     % Orient outward 8 quadrant bisectrice direction maxima neighbor normals
     for i = 1:numel(quad_ids)
         
-        cur_vtx = V(quad_ids(i),:);
-        knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
+        cur_pt = P(quad_ids(i),:);
+        knn_id = knnsearch(P,cur_pt,'k',k,'Distance','seuclidean');
         
-        n2swith_id = nonzeros((dot(N(knn_id,:),V(knn_id,:),2) < 0) .* knn_id');
+        n2swith_id = nonzeros((dot(N(knn_id,:),P(knn_id,:),2) < 0) .* knn_id');
         n2swith_id = setdiff(n2swith_id,id_vect);
         
         if ~isempty(n2swith_id)
@@ -184,12 +184,12 @@ if strcmpi(mode_orient,'oriented')
     end
     
     
-    dst = sqrt(sum(V.^2,2));
-    cur_id = find(dst == max(dst),1); % furthest vertex
-    cur_vtx = V(cur_id,:);
+    dst = sqrt(sum(P.^2,2));
+    cur_id = find(dst == max(dst),1); % furthest point
+    cur_pt = P(cur_id,:);
     
     % Normal orientation
-    norm_or = sign(dot(N(cur_id,:),cur_vtx,2));
+    norm_or = sign(dot(N(cur_id,:),cur_pt,2));
     
     if norm_or < 0
         
@@ -200,9 +200,9 @@ if strcmpi(mode_orient,'oriented')
     
     
     % From neighborhood to neighborhood
-    while ~isempty(knn_id) % && numel(id_vect) < nb_vtx % cur_id && ~isempty(cur_vtx) &&
+    while ~isempty(knn_id) % && numel(id_vect) < nb_pt % cur_id && ~isempty(cur_pt) &&
         
-        knn_id = knnsearch(V,cur_vtx,'k',k,'Distance','seuclidean');
+        knn_id = knnsearch(P,cur_pt,'k',k,'Distance','seuclidean');
         knn_id = setdiff(knn_id,id_vect,'stable');
         
         n2swith_id = nonzeros((dot(N(knn_id,:),repmat(N(cur_id,:),[numel(knn_id),1]),2) < 0) .* knn_id');
@@ -221,29 +221,29 @@ if strcmpi(mode_orient,'oriented')
         if ~isempty(knn_id)
             
             cur_id = knn_id(end); % fursthest
-            cur_vtx = V(cur_id,:);
+            cur_pt = P(cur_id,:);
             
         end
         
     end
     
     
-    rm_ids = setdiff(1:nb_vtx,id_vect);
+    rm_ids = setdiff(1:nb_pt,id_vect);
     raw_or_ids   = find(check_orientation);
     inter_or_ids = (1:nnz(check_orientation))';
     M = containers.Map(inter_or_ids,raw_or_ids);
     
-    V_ckeck = V(raw_or_ids,:);
+    P_ckeck = P(raw_or_ids,:);
     j = 1;
     
-    % Orient remaining vertex normals
+    % Orient remaining point normals
     while j < (1 + numel(rm_ids))
         
         cur_id = rm_ids(j);
-        cur_vtx = V(cur_id,:);
+        cur_pt = P(cur_id,:);
         
-        % Search nearest neighbor among already normal oriented vertex set
-        knn_id = knnsearch(V_ckeck,cur_vtx,'k',k,'Distance','seuclidean');
+        % Search nearest neighbor among already normal oriented point set
+        knn_id = knnsearch(P_ckeck,cur_pt,'k',k,'Distance','seuclidean');
         
         % Retrieve real indices with map
         knn_id = values(M,num2cell(knn_id));

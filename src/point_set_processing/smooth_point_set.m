@@ -1,5 +1,5 @@
-function V_out = smooth_point_set(V_in, k, nb_it)
-%% smooth_point_set : function to smooth one given point set (V_in).
+function P_out = smooth_point_set(P_in, k, nb_it)
+%% smooth_point_set : function to smooth one given point set (P_in).
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
 %
@@ -7,7 +7,7 @@ function V_out = smooth_point_set(V_in, k, nb_it)
 %%% Input arguments
 %
 %          [| | |]
-% - V_in = [X Y Z], real matrix double, the point set, size(V_in) = [nb_vertices,3].
+% - P_in = [X Y Z], real matrix double, the point set, size(P_in) = [nb_points,3].
 %          [| | |]
 %
 % - k : positive integer scalar double, the number of neighbor for the k
@@ -21,35 +21,35 @@ function V_out = smooth_point_set(V_in, k, nb_it)
 %
 %
 %           [| | |]
-% - V_out = [X Y Z], real matrix double, the point set, size(V_out) = [nb_vertices,3].
+% - P_out = [X Y Z], real matrix double, the point set, size(P_out) = [nb_points,3].
 %           [| | |]
 
 
 %% Body
-V_out = V_in;
-nb_vtx = size(V_in,1);
+P_out = P_in;
+nb_pt = size(P_in,1);
 
 
 for j = 1:nb_it
     
     % Compute normals
-    N = estimate_point_set_normals(V_out,k,'norm','oriented');
+    N = estimate_point_set_normals(P_out,k,'norm','oriented');
     
     % Loop on every point of the set
-    for i = 1:nb_vtx
+    for i = 1:nb_pt
         
         % Search for its k nearest neighbors
-        cur_vtx = V_in(i,:);
-        ids = knnsearch(V_in,cur_vtx,'k',k,'Distance','seuclidean');
+        cur_pt = P_in(i,:);
+        ids = knnsearch(P_in,cur_pt,'k',k,'Distance','seuclidean');
                 
         % Compute their average
-        G = mean(V_in(ids(1,2:end),:),1);
+        G = mean(P_in(ids(1,2:end),:),1);
         N(i,:) = mean(N(ids(1,2:end),:),1);
         
         % Project the current point on the plane orthogonal
         % to its normal and going throught the middle point
-        [~,H] = point_to_plane_distance(cur_vtx,N(i,:),G);
-        V_out(i,:) = H;
+        [~,H] = point_to_plane_distance(cur_pt,N(i,:),G);
+        P_out(i,:) = H;
         
     end
         

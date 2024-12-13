@@ -1,13 +1,13 @@
-function V_out = regularize_point_set(V_in, k, nb_it)
-%% regularize_point_set : function to regularize one given point set (V_in).
+function P_out = regularize_point_set(P_in, k, nb_it)
+%% regularize_point_set : function to regularize one given point set (P_in).
 %
-% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet (at) free.fr, 2024.
 %
 %
 %%% Input arguments
 %
 %          [| | |]
-% - V_in = [X Y Z], real matrix double, the point set, size(V_in) = [nb_vertices,3].
+% - P_in = [X Y Z], real matrix double, the point set, size(P_in) = [nb_points,3].
 %          [| | |]
 %
 % - k : positive integer scalar double, the number of neighbor for the k
@@ -20,35 +20,35 @@ function V_out = regularize_point_set(V_in, k, nb_it)
 %%% Output argument
 %
 %          [| | |]
-% - V_out = [X Y Z], real matrix double, the point set, size(V_out) = [nb_vertices,3].
+% - P_out = [X Y Z], real matrix double, the point set, size(P_out) = [nb_points,3].
 %          [| | |]
 
 
 %% Body
-nb_vtx = size(V_in,1);
-ids = zeros(nb_vtx,k);
-dst = zeros(nb_vtx,k);
-N = sqrt(sum(V_in.^2,2));
-V_out = zeros(size(V_in));
+nb_pt = size(P_in,1);
+ids = zeros(nb_pt,k);
+dst = zeros(nb_pt,k);
+N = sqrt(sum(P_in.^2,2));
+P_out = zeros(size(P_in));
 
 
 for j = 1:nb_it
     
-    % Compute raw normals for each vertex of the set
-    for i = 1:nb_vtx
+    % Compute raw normals for each point of the set
+    for i = 1:nb_pt
         
         % I Look for k nearest neighbors
-        [ids(i,:),dst(i,:)] = knnsearch(V_in,V_in(i,:),'k',k,'Distance','seuclidean');
+        [ids(i,:),dst(i,:)] = knnsearch(P_in,P_in(i,:),'k',k,'Distance','seuclidean');
                 
-        V_ngb = V_in(ids(i,2:end),:);                
-        V_out(i,:) = mean(V_ngb,1);
+        P_ngb = P_in(ids(i,2:end),:);                
+        P_out(i,:) = mean(P_ngb,1);
         
     end
     
 end
 
 % Keep norm
-V_out = N .* V_out ./ sqrt(sum(V_in.^2,2));
+P_out = N .* P_out ./ sqrt(sum(P_in.^2,2));
 
 
 end % regularize_point_set
