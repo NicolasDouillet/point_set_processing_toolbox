@@ -4,7 +4,6 @@ clc;
 
 addpath(genpath('../src'));
 addpath('../data');
-addpath('../point_set_grid_simplify');
 
 load('virus_cell_like_surface.mat');
 % load('unit_ball_16384_pts.mat'); % grid_step = 0.2
