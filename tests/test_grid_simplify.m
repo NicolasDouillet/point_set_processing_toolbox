@@ -16,9 +16,8 @@ set(gcf,'Color',[0 0 0]);
 
 marker = '.';
 color = 'y';
-markersize = 6;
 
-plot3(P(:,1),P(:,2),P(:,3),marker,'Color',color,'MarkerSize',markersize,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
+plot3(P(:,1),P(:,2),P(:,3),marker,'Color',color,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
 xlabel('X'), ylabel('Y'), zlabel('Z');
 axis equal;
 set(gca, 'Color', [0 0 0], 'XColor', [1 1 1], 'YColor', [1 1 1], 'ZColor', [1 1 1]);
@@ -31,7 +30,7 @@ S = point_set_grid_simplify(P,grid_step);
 
 
 subplot(122);
-plot3(S(:,1),S(:,2),S(:,3),marker,'Color',color,'MarkerSize',markersize,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
+plot3(S(:,1),S(:,2),S(:,3),marker,'Color',color,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
 xlabel('X'), ylabel('Y'), zlabel('Z');
 axis equal;
 set(gca, 'Color', [0 0 0], 'XColor', [1 1 1], 'YColor', [1 1 1], 'ZColor', [1 1 1]);

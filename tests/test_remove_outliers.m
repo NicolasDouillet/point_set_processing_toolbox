@@ -14,19 +14,18 @@ set(gcf,'Color',[0 0 0]);
 
 marker = '.';
 color = 'y';
-markersize = 6;
 
-plot3(P(:,1),P(:,2),P(:,3),marker,'Color',color,'MarkerSize',markersize,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
+plot3(P(:,1),P(:,2),P(:,3),marker,'Color',color,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
 xlabel('X'), ylabel('Y'), zlabel('Z');
 axis equal;
 set(gca, 'Color', [0 0 0], 'XColor', [1 1 1], 'YColor', [1 1 1], 'ZColor', [1 1 1]);
 view(3);
-title('Unit sphere 4096 points with outliers','Color',[1 1 1],'FontSize',16);
+title('Unit sphere 4096 points with outlier groups','Color',[1 1 1],'FontSize',16);
 
-P = remove_outliers(P,20,1);
+P = remove_outliers(P,31,2.5);
 
 subplot(122);
-plot3(P(:,1),P(:,2),P(:,3),marker,'Color',color,'MarkerSize',markersize,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
+plot3(P(:,1),P(:,2),P(:,3),marker,'Color',color,'MarkerEdgeColor',color,'MarkerFaceColor',color), hold on;
 xlabel('X'), ylabel('Y'), zlabel('Z');
 axis equal;
 set(gca, 'Color', [0 0 0], 'XColor', [1 1 1], 'YColor', [1 1 1], 'ZColor', [1 1 1]);

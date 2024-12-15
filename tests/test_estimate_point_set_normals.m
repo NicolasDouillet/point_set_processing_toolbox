@@ -28,7 +28,7 @@ load(filename);
 
 
 nb_ngb = 4; % >= 4 and adapt function of point set local density 
-N = estimate_point_set_normals(P,nb_ngb,'norm');
+N = estimate_point_set_normals(P,nb_ngb); % normalized and oriented by default
 plot_point_set(P);
 quiver3(P(:,1),P(:,2),P(:,3),N(:,1),N(:,2),N(:,3),'Color',[0 1 1],'LineWidth',1), hold on;
 hidden off;
