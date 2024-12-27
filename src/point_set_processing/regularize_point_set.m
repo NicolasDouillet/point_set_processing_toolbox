@@ -25,9 +25,9 @@ function P_out = regularize_point_set(P_in, k, nb_it)
 
 
 %% Body
-nb_pt = size(P_in,1);
-ids = zeros(nb_pt,k);
-dst = zeros(nb_pt,k);
+nb_pts = size(P_in,1);
+ids = zeros(nb_pts,k);
+dst = zeros(nb_pts,k);
 N = sqrt(sum(P_in.^2,2));
 P_out = zeros(size(P_in));
 
@@ -35,7 +35,7 @@ P_out = zeros(size(P_in));
 for j = 1:nb_it
     
     % Compute raw normals for each point of the set
-    for i = 1:nb_pt
+    for i = 1:nb_pts
         
         % I Look for k nearest neighbors
         [ids(i,:),dst(i,:)] = knnsearch(P_in,P_in(i,:),'k',k,'Distance','seuclidean');

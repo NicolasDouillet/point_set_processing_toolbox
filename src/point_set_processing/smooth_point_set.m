@@ -27,7 +27,7 @@ function P_out = smooth_point_set(P_in, k, nb_it)
 
 %% Body
 P_out = P_in;
-nb_pt = size(P_in,1);
+nb_pts = size(P_in,1);
 
 
 for j = 1:nb_it
@@ -36,7 +36,7 @@ for j = 1:nb_it
     N = estimate_point_set_normals(P_out,k,'norm','oriented');
     
     % Loop on every point of the set
-    for i = 1:nb_pt
+    for i = 1:nb_pts
         
         % Search for its k nearest neighbors
         cur_pt = P_in(i,:);

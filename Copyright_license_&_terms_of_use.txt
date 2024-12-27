@@ -1,0 +1,20 @@
+%% COPYRIGHT, LICENSE AND TERMS OF USE
+
+Author : Nicolas Douillet
+
+
+All the code included in this toolbox is the result of my (Nicolas Douillet) unique, personal, own work and effort during the year 2024, and going on for upcoming updates.
+
+Each one of the functions included have been independently tested, however I cannot provide any warrantee about them.
+
+This toolbox and its content is free of use and (re)distribution with the following condition :
+This license file must be included as well as each function header must be preserved without modification of any kind.
+
+SELLING THIS WHOLE TOOLBOX OR EVEN PARTS OF IT IS STRICLY PROHIBITED.
+
+Modification of any kind are done under your own, only and unique personal responsability.
+
+Downloading and using this toolbox or just part of it assumes you to have read, accepted and agreed with all the previous conditions of this license, without any reservation.
+
+
+License version : 27 / 12 / 2024.

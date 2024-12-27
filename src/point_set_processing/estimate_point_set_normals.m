@@ -53,12 +53,12 @@ bb_idx = [idx1 idx2 idy1 idy2 idz1 idz2]; % fursthest point belongs to this boun
 
 P = P - bbc; % mean(P,1);
 
-nb_pt = size(P,1);
-ids = zeros(nb_pt,k);
-N   = zeros(nb_pt,3);
+nb_pts = size(P,1);
+ids = zeros(nb_pts,k);
+N   = zeros(nb_pts,3);
 
 % Compute raw normals for each point of the set
-for i = 1:nb_pt
+for i = 1:nb_pts
     
     % I Look for k nearest neighbors
     ids(i,:) = knnsearch(P,P(i,:),'k',k,'Distance','seuclidean');
@@ -103,7 +103,7 @@ end
 if strcmpi(mode_orient,'oriented')
     
     % VI Reorient point normals coherently
-    check_orientation = false(nb_pt,1);
+    check_orientation = false(nb_pts,1);
     id_vect = [];
     
     % Orient outward bounding box xyz limits neighbor normals
@@ -200,7 +200,7 @@ if strcmpi(mode_orient,'oriented')
     
     
     % From neighborhood to neighborhood
-    while ~isempty(knn_id) % && numel(id_vect) < nb_pt % cur_id && ~isempty(cur_pt) &&
+    while ~isempty(knn_id) % && numel(id_vect) < nb_pts % cur_id && ~isempty(cur_pt) &&
         
         knn_id = knnsearch(P,cur_pt,'k',k,'Distance','seuclidean');
         knn_id = setdiff(knn_id,id_vect,'stable');
@@ -228,7 +228,7 @@ if strcmpi(mode_orient,'oriented')
     end
     
     
-    rm_ids = setdiff(1:nb_pt,id_vect);
+    rm_ids = setdiff(1:nb_pts,id_vect);
     raw_or_ids   = find(check_orientation);
     inter_or_ids = (1:nnz(check_orientation))';
     M = containers.Map(inter_or_ids,raw_or_ids);

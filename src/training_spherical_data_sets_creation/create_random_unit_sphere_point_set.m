@@ -1,5 +1,5 @@
-function V = create_spherical_point_set(n)
-%% : function to create random noisy sphere in spherical coordinates
+function P = create_random_unit_sphere_point_set(n)
+%% create_random_unit_sphere_point_set : function to create random noisy sphere in spherical coordinates
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
 %
@@ -13,7 +13,7 @@ function V = create_spherical_point_set(n)
 %%% Output argument
 %
 %       [| | |]
-% - V = [X Y Z], real matrix double, the point set, size(V) = [nb_points,3].
+% - P = [X Y Z], real matrix double, the point set, size(P) = [nb_points,3].
 %       [| | |]
 
 
@@ -32,7 +32,7 @@ X = rho.*sin(theta).*cos(phi);
 Y = rho.*sin(theta).*sin(phi);
 Z = rho.*cos(theta);
 
-V = cat(2,X',Y',Z');
+P = cat(2,X',Y',Z');
 
 
-end % creates_spherical_point_set
+end % create_random_unit_sphere_point_set
