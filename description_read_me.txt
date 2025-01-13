@@ -7,7 +7,7 @@ Please don'tforget ta rate if this code helped you. Thanks ! ;-)
 
 %% DESCRIPTION
 
-This package is a point set processing toolbox which uses command lines in Matlab(R) console. It is designed to deal with and process 3D point sets with or without colors.
+This package is a point set processing toolbox which uses command lines in Matlab(R) console. It is designed to deal with and process 3D point sets with -color as an attribute- or without colors.
 For 2D point set processing, you can just padd your P = [X,Y] coordinates with one Z zeros vector : P = cat(2,P,zeros(size(P,1),1)]
 
 
@@ -48,7 +48,7 @@ To use the sources, mind to add its path to your paths, just like in the header 
 
 %% COPYRIGHT, LICENSE AND TERMS OF USE
 
-Please read the attached file : Copyright_license_&_terms_of_use.txt
+Please read and refer to the attached file : Copyright_license_&_terms_of_use.txt
 
 
 %% MISC INFORMATION
@@ -65,4 +65,4 @@ Matlab release version used for development and tests : R2019b.
 
 Contact : please report me any bug (with data set used and Matlab(R) code attached) or suggestion at nicolas.douillet9 (at) gmail.com
 
-Last update : 27 / 12 /2024.
+Last update : 12/31/2024.
