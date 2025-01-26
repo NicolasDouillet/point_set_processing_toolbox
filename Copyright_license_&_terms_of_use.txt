@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-All the code included in this toolbox is the result of my personal own work during the year 2024, and going on for upcoming version updates.
+All the code included in this toolbox is the result of my own work during the year 2024, and going on for further versions.
 
 
 This toolbox and its content is free of use and redistribution on all the following conditions that :
@@ -18,7 +18,7 @@ This toolbox and its content is free of use and redistribution on all the follow
 
 - I do not provide any warrantee on the correctness of these algorithms and functions (even if they all have been have been independently tested);  
 
-- The point set test files 'sinico.mat' and 'virus_cell_like_surface.mat' are my creations. I allow their redistributions on the condition that their author (me) is mentioned for each use. 
+- The point set test files 'sinico.mat' and 'spiky_cell_like_surface.mat' are my creations. I allow their redistributions on the condition that their author (me) is mentioned for each use. 
 
 - Downloading and using this toolbox or just part of it assumes you to have read, accepted and agreed with all the previous conditions of this license, without any exception.
 

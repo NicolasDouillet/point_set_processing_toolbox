@@ -6,7 +6,7 @@ addpath(genpath('../src'));
 addpath('../data');
 
 
-load('virus_cell_like_surface.mat');
+load('spiky_cell_like_surface.mat');
 % load('unit_ball_16384_pts.mat'); % grid_step = 0.2
 
 h = figure;
