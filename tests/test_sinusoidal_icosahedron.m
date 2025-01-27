@@ -5,5 +5,6 @@ clc;
 addpath(genpath('../src'));
 addpath('../data');
 
-V = sinusoidal_icosahedron(120);
-plot_point_set(V);
+nb_samples = 120;
+P = sinusoidal_icosahedron(nb_samples);
+plot_point_set(P);

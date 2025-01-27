@@ -1,5 +1,5 @@
-function P = create_random_unit_sphere_point_set(n)
-%% create_random_unit_sphere_point_set : function to create random noisy sphere in spherical coordinates
+function P = random_unit_sphere_point_set(n)
+%% random_unit_sphere_point_set : function to create random noisy sphere in spherical coordinates
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
 %
@@ -35,4 +35,4 @@ Z = rho.*cos(theta);
 P = cat(2,X',Y',Z');
 
 
-end % create_random_unit_sphere_point_set
+end % random_unit_sphere_point_set

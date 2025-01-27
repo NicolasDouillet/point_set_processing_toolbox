@@ -1,5 +1,5 @@
-function [P, C] = create_random_colored_unit_ball_point_set(n)
-%% create_random_colored_unit_ball_point_set : function to create one random colored unitary ball point set.
+function [P, C] = random_colored_unit_ball_point_set(n)
+%% random_colored_unit_ball_point_set : function to create one random colored unitary ball point set.
 %
 %%% Author : nicolas.douillet (at) free.fr, 2024.
 %
@@ -34,4 +34,4 @@ cid = ceil(255*R);
 C = cmap(cid,:);
 
 
-end % create_random_colored_unit_ball_point_set
+end % random_colored_unit_ball_point_set

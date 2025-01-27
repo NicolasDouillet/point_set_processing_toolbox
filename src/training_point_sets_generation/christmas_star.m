@@ -1,4 +1,4 @@
-function V = christmas_star(nb_samples)
+function P = christmas_star(nb_samples)
 %% christmas_star : function to compute
 % and save a 3D Christmas star point set.
 %
@@ -13,7 +13,7 @@ function V = christmas_star(nb_samples)
 %%% Output arguments
 %
 %       [|  |  | ]
-% - V = [Vx Vy Vz], real matrix double, the point set. Size(V) = [nb_points,3].
+% - P = [Px Py Pz], real matrix double, the point set. Size(P) = [nb_points,3].
 %       [|  |  | ]
 
 
@@ -92,15 +92,15 @@ for k = 1:4
     Pc = cat(1,Pc,(Mrz^k*P4')');      
 end
 
-V = cat(1,P,Pc);
-V = unique(V,'rows');
+P = cat(1,P,Pc);
+P = unique(P,'rows');
 
 
 end % christmas_star
 
 
 %% sample_and_shape_triangle subfunction
-function V = sample_and_shape_triangle(V1, V2, V3, a, nbstep, e)
+function P = sample_and_shape_triangle(V1, V2, V3, a, nbstep, e)
 %
 % Author : nicolas.douillet9 (at) gmail.com, 2016-2025.
 
@@ -115,7 +115,7 @@ stepu = a / nbstep;
 stepv = a / nbstep;
 
 % Sampling & points creation
-V = [];
+P = [];
 
 for m = 0:nbstep
     
@@ -132,7 +132,7 @@ for m = 0:nbstep
             
             % Radial vector            
             rv = M + e*cos(2*pi*min_dst/norm(u))*M/norm(M);       
-            V = cat(2,V,rv);
+            P = cat(2,P,rv);
             
         end
            
