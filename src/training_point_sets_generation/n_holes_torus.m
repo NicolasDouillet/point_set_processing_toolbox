@@ -37,11 +37,7 @@ Z = @(u,v)r*cos(u);
 range_u = [0 2*pi floor(0.5*nb_samples)+1];
 range_v = [0 2*pi nb_samples];
 
-[M,~,v] = torus_homeo_sfc_isotropic_splg(X,Y,Z,range_u,range_v,option_random_sampling);
-
-% Half torus : sort range_v
-f = v < pi;
-P = M(f,:);
+P = torus_homeo_sfc_isotropic_splg(X,Y,Z,range_u,range_v,option_random_sampling);
 
 % Remove junctions points
 e = [];

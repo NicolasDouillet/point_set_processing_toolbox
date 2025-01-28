@@ -69,6 +69,7 @@ u = u_min + (u_max-u_min)*u;
 
 v_step = meshgrid(linspace(0,1,spl_v),linspace(0,1,spl_u));
 v_rand = rand(spl_u,spl_v);
+
 v = option_random_sampling * v_rand + (1-option_random_sampling) * v_step;
 v = v_min + (v_max - v_min)*v;
 

@@ -43,18 +43,18 @@ range_v = [0 2*pi floor(0.25*nb_samples)+1];
 SA = torus_homeo_sfc_isotropic_splg(X,Y,Z,range_u,range_v,false);
 
 % Z and Y rotation matrices
-Mrz = [-0.5 -0.5*sqrt(3) 0;
+Rmz = [-0.5 -0.5*sqrt(3) 0;
        0.5*sqrt(3) -0.5  0;
        0 0 1];
 
 Y_angle = 0.5*pi+delta;
 
-Mry = [cos(Y_angle) 0 -sin(Y_angle);
+Rmy = [cos(Y_angle) 0 -sin(Y_angle);
        0            1  0
        sin(Y_angle) 0  cos(Y_angle)];
 
 % Remove obvious extra junctions points I
-A_dir_vect = Mry*[1; 0; 0];
+A_dir_vect = Rmy*[1; 0; 0];
 e = [];
 
 for k = 1:size(SA,1)
@@ -93,8 +93,8 @@ for k = 1:size(SA,1)
 end
 
 SA = SA(e,:);
-SB = (Mrz*SA')';
-SC = (Mrz*Mrz*SA')';
+SB = (Rmz*SA')';
+SC = (Rmz*Rmz*SA')';
 
 % AB & AC curved segments
 Roa = [5/6 -0.5/sqrt(3) -sqrt(2)/3;
@@ -102,8 +102,8 @@ Roa = [5/6 -0.5/sqrt(3) -sqrt(2)/3;
        -sqrt(2)/3 -sqrt(2)/sqrt(3) -1/3];
    
 AB = (Roa*SA')';
-BC = (Mrz*AB')';
-AC = (Mrz*BC')';
+BC = (Rmz*AB')';
+AC = (Rmz*BC')';
 
 P = cat(1,SA,SB,SC,AB,BC,AC);
 P = unique(P,'rows');
