@@ -1,5 +1,5 @@
-function P = biscuit(L, l, e, nb_samples, isotropic_sampling, random_sampling)
-%% biscuit : function to compute a point set in the shape of a biscuit.
+function P = biscuit(L, l, e, nb_samples, random_sampling)
+% biscuit : function to compute a point set in the shape of a biscuit.
 %
 %%% Author : nicolas.douillet9 (at)gmail.com, 2016-2025. 
 %
@@ -10,8 +10,7 @@ function P = biscuit(L, l, e, nb_samples, isotropic_sampling, random_sampling)
 % - l (width, double)
 % - e (thickness = 2*sphere_radius, double)
 % - nb_samples (integer)
-% - isotropic_sampling (bool)
-% - random_sampling
+% - random_sampling : logical
 %
 %
 %%% Output argument
@@ -28,7 +27,7 @@ function P = biscuit(L, l, e, nb_samples, isotropic_sampling, random_sampling)
 % thickness e in Z direction
 
 
-%% Body
+% Body
 angle_step = 2*pi/nb_samples;
 linstepx = 0.1; % step in x direction % angle_step
 linstepy = 0.1; % step in y direction % angle_step
@@ -44,7 +43,7 @@ phi =    0:angle_step:2*pi;
 sz_theta1 = size(theta,1);
 sz_phi2   = size(phi,2);
 
-if isotropic_sampling
+if random_sampling
     
     X = @(u,v)r*sin(u).*cos(v);
     Y = @(u,v)r*sin(u).*sin(v);
@@ -131,7 +130,7 @@ if isotropic_sampling
     Phz = repmat(0.5*e,[size(Phx,1) size(Phx,2)]);
     
     
-else % if ~isotropic_sampling
+else % if ~random_sampling
     
     Sx = r*sin(theta)*cos(phi);
     Sy = r*sin(theta)*sin(phi);

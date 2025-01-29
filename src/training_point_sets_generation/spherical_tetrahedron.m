@@ -1,4 +1,4 @@
-function P = spherical_tetrahedron(Rho, r, nb_samples)
+function P = spherical_tetrahedron(Rho, r, nb_samples, random_sampling)
 %% spherical_tetrahedron : function to compute and save
 % a spherical tetrahedron shaped point set P.
 %
@@ -40,7 +40,7 @@ Y = @(u,v)r*sin(v);
 % Sampling parameters
 range_u = [delta 0.5*pi floor(((0.5*pi-delta)/pi)*nb_samples)+1];
 range_v = [0 2*pi floor(0.25*nb_samples)+1];
-SA = torus_homeo_sfc_isotropic_splg(X,Y,Z,range_u,range_v,false);
+SA = torus_homeo_sfc_isotropic_splg(X,Y,Z,range_u,range_v,random_sampling);
 
 % Z and Y rotation matrices
 Rmz = [-0.5 -0.5*sqrt(3) 0;
