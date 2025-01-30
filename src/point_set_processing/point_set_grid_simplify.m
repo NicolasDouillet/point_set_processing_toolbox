@@ -1,7 +1,7 @@
 function [P_out, C_out, N_out] = point_set_grid_simplify(P_in, grid_step, mode, C_in, N_in)
 %% point_set_grid_simplify : function to grid simplify one given point set (P_in).
 %
-%%% Author : nicolas.douillet (at) free.fr, 2019-2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2019-2025.
 %
 %
 %%% Input arguments

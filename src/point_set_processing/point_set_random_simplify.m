@@ -1,7 +1,7 @@
 function [P_out, C_out, N_out] = point_set_random_simplify(P_in, coeff, C_in, N_in)
 %% point_set_random_simplify : function to random simplify one given point set (P_in).
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input arguments

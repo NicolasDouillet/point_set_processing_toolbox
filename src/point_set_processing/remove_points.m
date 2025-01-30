@@ -1,7 +1,7 @@
 function [P_out, C_out, N_out] = remove_points(P_set, P_in, C_in, N_in, mode)
 %% remove_points : function to remove points from the point set.
 %
-%%% Author & support : nicolas.douillet (at) free.fr, 2020-2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2020-2025.
 %
 %
 %%% Input arguments

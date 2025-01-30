@@ -2,7 +2,7 @@ function [P, id1, id2] = point_sets_xor(P1, P2, precision)
 %% point_sets_xor : function to compute and return the
 % exclusive union between the two point sets P1 and P2.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 
 
 %% Body

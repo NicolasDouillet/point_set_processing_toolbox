@@ -2,7 +2,7 @@ function [] = plot_bounding_box(bbox)
 %% plot_bounding_box : function to plot the bounding box of the point set (V) in a Matlab (R) figure.
 % Use plot_point_set function to plot the point set before. 
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input argument

@@ -2,7 +2,7 @@ function [P_out, C_out, N_out] = remove_duplicated_points(P_in, C_in, N_in)
 %% remove_duplicated_points : function to remove
 % duplicated points from the point set.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2020-2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2020-2025.
 %
 %
 %%% Input arguments

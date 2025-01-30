@@ -1,7 +1,7 @@
 function [] = plot_point_set_normals(P, N, C)
 %% plot_point_set_normals : function to plot the point set (P) and its normals set in a Matlab (R) figure.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2020-2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2020-2025.
 %
 %
 %%% Input arguments

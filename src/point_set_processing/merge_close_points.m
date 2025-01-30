@@ -2,7 +2,7 @@ function [P_out, C_out, N_out] = merge_close_points(P_in, tol, C_in, N_in)
 %% merge_close_points : function to merge together points closer
 % than the tolerance tol in terms of euclidian distance.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input arguments

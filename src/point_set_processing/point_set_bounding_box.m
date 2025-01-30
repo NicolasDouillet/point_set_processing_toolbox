@@ -1,7 +1,7 @@
 function bbox = point_set_bounding_box(P)
 %% point_set_bounding_box : function to compute the bounding box of the point set.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input argument

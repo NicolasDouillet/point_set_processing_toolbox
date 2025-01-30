@@ -1,7 +1,7 @@
 function N = estimate_point_set_normals(P, k, mode_norm, mode_orient) % orientation as an option
 %% estimate_point_set_normals : function to estimate normals to the points of the given set (P).
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input arguments

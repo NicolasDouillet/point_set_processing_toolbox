@@ -1,7 +1,7 @@
 function P_out = smooth_point_set(P_in, k, nb_it)
 %% smooth_point_set : function to smooth one given point set (P_in).
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input arguments

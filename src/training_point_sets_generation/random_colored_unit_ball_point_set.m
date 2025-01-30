@@ -1,7 +1,7 @@
 function [P, C] = random_colored_unit_ball_point_set(n)
 %% random_colored_unit_ball_point_set : function to create one random colored unitary ball point set.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input argument

@@ -2,7 +2,7 @@ function [P, i1] = point_sets_intersection(P1, P2, precision)
 %% numeric_data_arrays_intersection : function to compute and return the
 % intersection between the two point sets P1 and P2.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 
 
 %% Body

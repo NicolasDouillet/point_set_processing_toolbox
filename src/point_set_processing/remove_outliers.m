@@ -2,7 +2,7 @@ function [P_out, C_out, N_out] = remove_outliers(P_in, k, pct2rm, C_in, N_in)
 %% remove_outliers : function to remove rm_pct percentage of the outliers
 % present in the given 3D point set P_in.
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input arguments
