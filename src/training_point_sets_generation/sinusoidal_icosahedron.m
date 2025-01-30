@@ -165,17 +165,8 @@ Z = Z(:);
 P = [X Y Z];
 P = unique(P,'rows');
 
-for i = 1:size(P,1)
-    
-    radius = sqrt(sum(P(i,:).^2));
-    
-    if radius ~= 1
-        
-        P(i,:) = P(i,:) / radius;
-        
-    end
-    
-end
+radius = sqrt(sum(P.^2,2));
+P = P./radius;
 
 f = [];
 coeff = [];
@@ -229,34 +220,34 @@ end % closest_point
 
 
 %% sample_triangle subfunction
-function P = sample_triangle(V1, V2, V3, nbstep)
+function P = sample_triangle(V1, V2, V3, nb_steps)
 %
 % Author : nicolas.douillet9 (at) gmail.com, 2016-2025.
 
 
 % Create sampling grid
-global Ndim;
-
 Ndim = size(V1,1);
 
 % (V1V2, V1V3) base
 u = (V2 - V1);
 v = (V3 - V1);
 
-P = zeros(sum(1:nbstep+1),Ndim);
+P = zeros(sum(1:nb_steps+1),Ndim);
 
 nu = u / norm(u);
 nv = v / norm(v);
-stepu = norm(u) / nbstep;
-stepv = norm(v) / nbstep;
+
+stepu = norm(u) / nb_steps;
+stepv = norm(v) / nb_steps;
+
 k = 1;
 
 % Sampling & points generation
-for m = 0:nbstep
+for m = 0:nb_steps
     
-    for n = 0:nbstep
+    for n = 0:nb_steps
         
-        if m+n <= nbstep % in (V1,V2,V3) triangle conditions ; indices # nb segments
+        if m+n <= nb_steps % in (V1,V2,V3) triangle conditions ; indices # nb segments
             
             % translation vector
             tv = m*stepu*nu + n*stepv*nv;

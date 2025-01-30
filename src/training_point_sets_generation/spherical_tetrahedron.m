@@ -13,7 +13,7 @@ function P = spherical_tetrahedron(Rho, r, nb_samples, random_sampling)
 %
 % - nb_samples : positive integer scalar double, the number of samples.
 %
-% - random_sampling : logical true/false* | 1/0*, the option to random for random sampling.
+% - random_sampling : logical true/false* | 1/0*, the option to random for sampling.
 %
 %
 %%% Output argument

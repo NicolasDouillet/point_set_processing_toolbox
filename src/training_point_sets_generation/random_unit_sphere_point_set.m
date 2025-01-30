@@ -1,7 +1,7 @@
 function P = random_unit_sphere_point_set(n)
 %% random_unit_sphere_point_set : function to create random noisy sphere in spherical coordinates
 %
-%%% Author : nicolas.douillet (at) free.fr, 2024.
+%%% Author : nicolas.douillet9 (at) gmail.com, 2024-2025.
 %
 %
 %%% Input argument
