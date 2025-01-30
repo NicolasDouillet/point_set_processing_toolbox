@@ -1,4 +1,4 @@
-function P = sinusoidal_icosahedron(nb_samples, w)
+function P = sinusoidal_icosahedron(nb_samples, w, random_sampling)
 %% sinusoidal_icosahedron : function to compute
 % and save a sinusoidal icosahedron point set.
 %
@@ -10,13 +10,14 @@ function P = sinusoidal_icosahedron(nb_samples, w)
 % sinusoidal_icosahedron;
 % sinusoidal_icosahedron(nb_samples);
 % sinusoidal_icosahedron(nb_samples, w);
-% P = sinusoidal_icosahedron(nb_samples, w);
+% sinusoidal_icosahedron(nb_samples, w, random_sampling);
+% P = sinusoidal_icosahedron(nb_samples, w, random_sampling);
 %
 %
 %%% Description
 %
 % sinusoidal_icosahedron computes a sinusoidal icosahedron
-% point set with parameters nb_samples = 60, w = 1 by default.
+% point set with parameters nb_samples = 32, w = 1 by default.
 %
 % sinusoidal_icosahedron(nb_samples) samples at the value nb_samples
 % each icosahedron basis triangle (20).
@@ -24,17 +25,20 @@ function P = sinusoidal_icosahedron(nb_samples, w)
 % sinusoidal_icosahedron(nb_samples, w) uses the given shape parameter
 % w.
 %
+% sinusoidal_icosahedron(nb_samples, w, random_sampling) generates random samples when random_sampling = true/1.
+%
 % P = sinusoidal_icosahedron(nb_samples, w)
 % stores the point set coordinates in P.
 %
 %
 %%% Input arguments
 %
-% - nb_samples : positive integer scalar double, nb_samples > 2.
-%                Remarkable value : nb_samples = 3 gives an icosahedron. Optional.
+% - nb_samples : positive integer scalar double, nb_samples > 2. Optional.
 %   
 % - w : real scalar double, the shape parameter.
-%       Remarkable value : w = 0 gives a geoid. Optional.
+%       Remarkable value : w = 0 gives a sphere. Optional.
+%
+% - random_sampling : logical false*/true | 0*/1. Optional.
 %
 %
 %%% Output arguments
@@ -42,29 +46,16 @@ function P = sinusoidal_icosahedron(nb_samples, w)
 %       [|  |  | ]
 % - P = [Px Py Pz], real matrix double, the point set. Size(P) = [nb_points,3].
 %       [|  |  | ]
-%
-%
-%%% Example #1 : default parameters values
-% sinusoidal_icosahedron;
-%
-%
-%%% Example #2 : minimum number of samples
-% sinusoidal_icosahedron(6);
-%
-%
-%%% Example #3 : negative shape parameter value
-% sinusoidal_icosahedron(60,-1);
-%
-%
-%%% Example #4 : large shape parameter value
-% sinusoidal_icosahedron(60,3);
 
 
 %% Input parsing and default values
-if nargin < 2
-    w = 1;
-    if nargin < 1
-        nb_samples = 60;
+if nargin < 3
+    random_sampling = false;
+    if nargin < 2
+        w = 1;
+        if nargin < 1
+            nb_samples = 32;
+        end
     end
 end
 
@@ -72,7 +63,7 @@ end
 %% Body
 phi_n = 0.5*(1+sqrt(5));
 
-Mrz = [cos(0.4*pi) -sin(0.4*pi) 0;...
+Rmz = [cos(0.4*pi) -sin(0.4*pi) 0;...
        sin(0.4*pi) cos(0.4*pi) 0;...
        0 0 1];
 
@@ -83,7 +74,7 @@ a = 2/sqrt(phi_n*sqrt(5)); % edge length
 % 1st equilateral triangle
 V0 = [0 0 1]';
 V1 = [sin(centre_angle) 0 cos(centre_angle)]';
-V2 = Mrz*V1;
+V2 = Rmz*V1;
 
 % Lower base triangle with /O symetry
 V3 = -V0;
@@ -91,24 +82,24 @@ V4 = -V1;
 V5 = -V2;
 
 % (12) point set coordinates vector
-U0 = Mrz*V2;
-U1 = Mrz^2*V2;
-U2 = Mrz^3*V2;
-U3 = Mrz*V5;
-U4 = Mrz^2*V5;
-U5 = Mrz^3*V5;
+U0 = Rmz*V2;
+U1 = Rmz^2*V2;
+U2 = Rmz^3*V2;
+U3 = Rmz*V5;
+U4 = Rmz^2*V5;
+U5 = Rmz^3*V5;
 
 V = [V0 V1 V2 U0 U1 U2 V3 V4 V5 U3 U4 U5];
 
 % Bidirectional (u,v) sampling + compute corresponding squared distances vector
-U0 = sample_triangle(V0,V1,V2,floor(nb_samples/3));
+U0 = sample_triangle(V0,V1,V2,nb_samples,random_sampling);
 U0 = U0';
 
 % Replicate / rotation -> upper crown
 Uu = U0;
 
 for k = 1:4    
-    Uu = cat(2,Uu, Mrz^k*U0);    
+    Uu = cat(2,Uu,Rmz^k*U0);    
 end
 
 % Lower base triangle with /O symetry
@@ -116,14 +107,14 @@ V3 = -V0;
 V4 = -V1;
 V5 = -V2;
 
-U1 = sample_triangle(V3,V4,V5,floor(nb_samples/3));
+U1 = sample_triangle(V3,V4,V5,nb_samples,random_sampling);
 U1 = U1';
 
 % Lower crown
 Ul = U1;
 
 for k = 1:4
-    Ul = cat(2,Ul,Mrz^k*U1);    
+    Ul = cat(2,Ul,Rmz^k*U1);    
 end
 
 U = [Uu Ul];
@@ -131,9 +122,9 @@ U = [Uu Ul];
 % 1st belt triangle
 V6 = V1;
 V7 = V2;
-V8 = Mrz^2*V5;
+V8 = Rmz^2*V5;
 
-U2 = sample_triangle(V6,V8,V7,floor(nb_samples/3));
+U2 = sample_triangle(V6,V8,V7,nb_samples,random_sampling);
 U2 = U2';
 
 % 2nd belt triangle
@@ -141,7 +132,7 @@ V9  = -V6;
 V10 = -V7;
 V11 = -V8;
 
-U3 = sample_triangle(V9,V10,V11,floor(nb_samples/3));
+U3 = sample_triangle(V9,V10,V11,nb_samples,random_sampling);
 U3 = U3';
 
 % Full belt = centre crown
@@ -149,7 +140,7 @@ U4 = [U2 U3];
 Uc = U4;
 
 for k = 1:4
-    Uc = cat(2,Uc,Mrz^k*U4);    
+    Uc = cat(2,Uc,Rmz^k*U4);    
 end
 
 Sinico = [U Uc]; 
@@ -163,10 +154,10 @@ X = X(:);
 Y = Y(:);
 Z = Z(:);
 P = [X Y Z];
-P = unique(P,'rows');
 
 radius = sqrt(sum(P.^2,2));
 P = P./radius;
+P = unique(P,'rows');
 
 f = [];
 coeff = [];
@@ -174,7 +165,7 @@ coeff = [];
 for i = 1:size(P,1)
     
     % Closest point
-    [~, min_dst] = closest_point(P(i,:)',V);        
+    [~,min_dst] = closest_point(P(i,:)',V);        
     
     if min_dst < 0.5*a
         f = cat(1,f,i);
@@ -188,9 +179,9 @@ X_s = N(:,1);
 Y_s = N(:,2);
 Z_s = N(:,3);
 
-radius = sqrt(sum(X_s.^2+Y_s.^2+Z_s.^2, 2));
+radius = sqrt(sum(X_s.^2+Y_s.^2+Z_s.^2,2));
 theta_c = acos(Z_s ./ radius);
-phi_c = atan2(Y_s, X_s);
+phi_c = atan2(Y_s,X_s);
 Rho_s = w*0.5*(1+cos(coeff));
 
 % Arcos option
@@ -210,7 +201,7 @@ end % sinusoidal_icosahedron
 function [P0, min_dst] = closest_point(Point, P)
 
 
-dst_vect = sqrt(sum((P-repmat(Point, [1,size(P,2)])).^2,1));
+dst_vect = sqrt(sum((P-repmat(Point,[1,size(P,2)])).^2,1));
 f = find(dst_vect == min(dst_vect));
 min_dst = dst_vect(f(1));
 P0 = P(:,f(1));
@@ -220,7 +211,7 @@ end % closest_point
 
 
 %% sample_triangle subfunction
-function P = sample_triangle(V1, V2, V3, nb_steps)
+function P = sample_triangle(V1, V2, V3, nb_steps, random_sampling)
 %
 % Author : nicolas.douillet9 (at) gmail.com, 2016-2025.
 
@@ -234,29 +225,56 @@ v = (V3 - V1);
 
 P = zeros(sum(1:nb_steps+1),Ndim);
 
-nu = u / norm(u);
-nv = v / norm(v);
-
-stepu = norm(u) / nb_steps;
-stepv = norm(v) / nb_steps;
-
-k = 1;
-
-% Sampling & points generation
-for m = 0:nb_steps
+if ~random_sampling
     
-    for n = 0:nb_steps
+    nu = u / norm(u);
+    nv = v / norm(v);
+    
+    stepu = norm(u) / nb_steps;
+    stepv = norm(v) / nb_steps;
+    
+    k = 1;
+    
+    % Sampling & points generation
+    for m = 0:nb_steps
         
-        if m+n <= nb_steps % in (V1,V2,V3) triangle conditions ; indices # nb segments
+        for n = 0:nb_steps
             
-            % translation vector
-            tv = m*stepu*nu + n*stepv*nv;
-            P(k,:) = (V1 + tv)';
-            k = k+1;
+            if m+n <= nb_steps % in (V1,V2,V3) triangle conditions ; indices # nb segments
+                
+                % translation vector
+                tv = m*stepu*nu + n*stepv*nv;
+                P(k,:) = (V1 + tv)';
+                k = k+1;
+                
+            end
             
         end
         
     end
+    
+else % if random_sampling
+   
+    rand_coeff_vect = rand(2,size(P,1)-3);
+    f = sum(rand_coeff_vect,1) > 1;
+    rand_coeff_vect(:,f) = 1 - rand_coeff_vect(:,f);
+    
+    % Translation vectors
+    TV = repmat(rand_coeff_vect(1,:),[Ndim 1]).*repmat(u,[1 size(rand_coeff_vect,2)]) + ...
+         repmat(rand_coeff_vect(2,:),[Ndim 1]).*repmat(v,[1 size(rand_coeff_vect,2)]);        
+    
+    for k = 1:size(TV,2)
+        
+        % translation vector
+        tv = TV(:,k);                
+        P(k,:) = (V1 + tv)';
+        
+    end
+    
+    % Add the triangle vertices
+    P(end-2,:) = V1';
+    P(end-1,:) = V2';
+    P(end,:)   = V3';        
     
 end
 
