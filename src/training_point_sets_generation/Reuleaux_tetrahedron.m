@@ -7,7 +7,7 @@ function P = Reuleaux_tetrahedron(nb_samples, random_sampling)
 %
 %%% Input arguments
 %
-% - nb_samples : positive integer scalar double, nb_samples > 2. Optional.
+% - nb_samples : positive integer scalar double, nb_samples > 2. Default value is nb_samples = 32. Optional.
 %
 % - random_sampling : logical false*/true | 0*/1. Optional.
 %
@@ -60,8 +60,8 @@ if ~random_sampling
     SA = [x_SA;y_SA;z_SA];
     
     Rmz = [-0.5         -0.5*sqrt(3) 0;
-        0.5*sqrt(3) -0.5         0;
-        0            0           1];
+            0.5*sqrt(3) -0.5         0;
+            0            0           1];
     
     Rm = [u(1,1)^2-0.5*(1-u(1,1)^2) 1.5*u(1,1)*u(2,1)-u(3,1)*sqrt(3)/2 1.5*u(1,1)*u(3,1)+u(2,1)*sqrt(3)/2;
         1.5*u(1,1)*u(2,1)+u(3,1)*sqrt(3)/2 u(2,1)^2-0.5*(1-u(2,1)^2) 1.5*u(2,1)*u(3,1)-u(1,1)*sqrt(3)/2;
