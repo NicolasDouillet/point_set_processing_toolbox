@@ -1,0 +1,52 @@
+List of the PSP toolbox functions in /src ( 08 / 14 / 2025 )
+
+
+%% GEOMETRY RESSOURCES %%
+
+- point_to_plane_distance
+
+
+%% LOGICAL OPERATORS %%
+
+- point_sets_intersection
+- point_sets_XOR
+
+
+%% POINT SET PROCESSING %%
+
+- estimate_point_set_normals
+- merge_close_points
+- point_set_bounding_box
+- point_set_grid_simplify
+- point_set_random_simplify
+- regularize_point_set
+- remove_duplicated_points
+- remove_outliers
+- remove_points
+- smooth_point_set
+
+
+%% POINT SET SELECTION AND PLOT %%
+
+- plot_bounding_box
+- plot_point_set
+- plot_point_set_normals
+
+
+%% TRAINING POINT SETS GENERATION %%
+
+- biscuit
+- christmas_star
+- Concave_Reuleaux_tetrahedron
+- n_holes_torus
+- random_colored_unit_ball_point_set
+- random_unit_sphere_point_set
+- Reuleaux_tetrahedron
+- sinusoidal_dodecahedron
+- sinusoidal_icosahedron
+- sphere_homeo_sfc_isotropic_splg
+- spherical_tetrahedron
+- spiky_cell_like_surface
+- torus_homeo_sfc_isotropic_splg
+
+
